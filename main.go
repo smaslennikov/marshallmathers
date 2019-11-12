@@ -34,5 +34,9 @@ func main() {
         return
     }
 
+    for i := range list.Users {
+        list.Users[i].Locked = false
+    }
+
     fmt.Printf("%v\n\n", list)
 }
