@@ -5,11 +5,12 @@ import (
     "log"
 
     "gopkg.in/yaml.v2"
+    "io/ioutil"
 )
 
-var data = `username: test
-password: badpassword
-locked: false`
+type UserList struct {
+    Users []User `yaml:"users"`
+}
 
 type User struct {
     Name string `yaml:"username"`
@@ -18,15 +19,20 @@ type User struct {
 }
 
 func main() {
-    //fmt.Println(yaml)
+    list := UserList{}
 
-    u1 := User{}
-
-    err := yaml.Unmarshal([]byte(data), &u1)
+    file, err := ioutil.ReadFile("sample.yaml")
     if err != nil {
-        log.Fatalf("error: %v", err)
+        log.Fatalf("file.read error: %v", err)
+    }
+
+    //fmt.Println(string(file))
+
+    err = yaml.Unmarshal(file, &list)
+    if err != nil {
+        log.Fatalf("unmarshal error: %v", err)
         return
     }
 
-    fmt.Printf("--- u1:\n%v\n\n", u1)
+    fmt.Printf("%v\n\n", list)
 }
