@@ -1,0 +1,8 @@
+---
+users:
+  - username: test
+    password: badpassword
+    locked: false
+  - username: hacker
+    password: p@ssw0rd123$
+    locked: true
