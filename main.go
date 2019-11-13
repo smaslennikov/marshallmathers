@@ -73,6 +73,7 @@ func main() {
         return
     }
 
+    // TODO: variably set output filename via arguments
     outfile, err := os.Create("output.yaml")
     if err != nil {
         log.Fatalf("outfile creation error: %v", err)
