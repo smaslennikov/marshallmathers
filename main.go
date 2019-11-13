@@ -2,7 +2,10 @@ package main
 
 import (
     "fmt"
+    "os"
     "log"
+    "io"
+    "crypto/rand"
 
     "golang.org/x/crypto/pbkdf2"
     "gopkg.in/yaml.v2"
@@ -17,17 +20,27 @@ type UserList struct {
 type User struct {
     Name string `yaml:"username"`
     Pass string `yaml:"password"`
+    Salt string `yaml:"salt"`
     Locked bool `yaml:"locked"`
 }
 
 func main() {
     list := UserList{}
+    salt := []byte("")
 
+    // generate and set a salt if user specifies a flag
+    // TODO: use cobra to check flags and inform user of their purposes
+    if len(os.Args) > 1 {
+        fmt.Println("Using a random salt for hashing passwords")
+    }
+
+    // read in supplied sample yaml
     file, err := ioutil.ReadFile("sample.yaml")
     if err != nil {
         log.Fatalf("file.read error: %v", err)
     }
 
+    // unmarshal supplied sample yaml
     err = yaml.Unmarshal(file, &list)
     if err != nil {
         log.Fatalf("unmarshal error: %v", err)
@@ -35,11 +48,28 @@ func main() {
     }
 
     for i := range list.Users {
+        // lock each user
         list.Users[i].Locked = false
-        salt := ""
-        //fmt.Println(list.Users[i].Pass)
+
+        // generate and set a salt if user specifies a flag
+        if len(os.Args) > 1 {
+            // TODO: variably set length of salt
+            salt = make([]byte, 128)
+            _, err = io.ReadFull(rand.Reader, salt)
+            if err != nil {
+                log.Fatalf("random salt error: %v", err)
+            }
+        }
+
+        list.Users[i].Salt = string(salt)
         list.Users[i].Pass = string(pbkdf2.Key([]byte(list.Users[i].Pass), []byte(salt), 4096, 32, sha1.New))
     }
 
-    fmt.Printf("%v\n\n", list)
+    d, err := yaml.Marshal(&list)
+    if err != nil {
+        log.Fatalf("marshal error: %v", err)
+        return
+    }
+
+    fmt.Printf("%v\n\n", string(d))
 }
