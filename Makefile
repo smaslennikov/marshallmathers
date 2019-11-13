@@ -1,3 +1,4 @@
+MARKDOWN_FILE?=README.md
 SRC?=main.go
 ARGS?=
 
@@ -6,3 +7,6 @@ test:
 
 deps:
 	@go get
+
+toc:
+	markdown-toc --indent "    " -i $(MARKDOWN_FILE)
