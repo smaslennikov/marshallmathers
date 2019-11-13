@@ -9,4 +9,4 @@ I don't know what `unmarshall`ing means
 3. ~~Convert all `password` entries to a preferred hash~~
     - explain why the hash is more secure
     - ~~add a random salt~~
-4. Marshall data back into a file
+4. ~~Marshall data back into a file~~

@@ -59,17 +59,31 @@ func main() {
             if err != nil {
                 log.Fatalf("random salt error: %v", err)
             }
+
+            list.Users[i].Salt = string(salt)
         }
 
-        list.Users[i].Salt = string(salt)
-        list.Users[i].Pass = string(pbkdf2.Key([]byte(list.Users[i].Pass), []byte(salt), 4096, 32, sha1.New))
+        list.Users[i].Pass = string(pbkdf2.Key([]byte(list.Users[i].Pass), salt, 4096, 32, sha1.New))
     }
 
+    // TODO: obviously, if salt isn't required, it's still exported when marshalled. Fix this
     d, err := yaml.Marshal(&list)
     if err != nil {
         log.Fatalf("marshal error: %v", err)
         return
     }
 
-    fmt.Printf("%v\n\n", string(d))
+    outfile, err := os.Create("output.yaml")
+    if err != nil {
+        log.Fatalf("outfile creation error: %v", err)
+        return
+    }
+
+    _, err = io.WriteString(outfile, string(d))
+    if err != nil {
+        log.Fatalf("outfile write error: %v", err)
+        return
+    }
+
+    outfile.Sync()
 }
