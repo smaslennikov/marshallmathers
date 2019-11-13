@@ -29,13 +29,13 @@ This primitive implementation can be used two different ways. Either:
 
 ## Assumptions
 
-I assumed quite a few things in this simple implementations. Specific references can be found by `cat`ting for `TODO:`s in code, while a vague list follows:
+I assumed quite a few things in this simple implementations. Specific references can be found by `cat`ting for `TODO:`s in code, while a human-readable list follows:
 
-1. No proper argument parsing implementation is used,
-2. Many variables are preset with no ability to set in runtime,
-3. Even if no salt is required at runtime, a blank one will be present in the result,
-    - the original intention here was to allow for backwards compatibility: if we suppose that the output can't support a salt, it shouldn't be outputted. After all, this wasn't the case.
-4. Only one hashing algorithm is currently supported - `PBKDF2`, using SHA1.
+1. No proper argument parsing implementation is used
+2. Many variables are preset with no ability to set in runtime
+3. Even if no salt is required at runtime, a blank one will be present in the result
+    - the original intention here was to allow for backwards compatibility: if we suppose that the output can't support a salt, it shouldn't be a part of the output. After all, this wasn't the case.
+4. Only one hashing algorithm is currently supported - `PBKDF2`, using SHA1
 
 ## Hash algorithm choice
 
