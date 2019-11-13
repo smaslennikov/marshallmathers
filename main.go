@@ -4,8 +4,10 @@ import (
     "fmt"
     "log"
 
+    "golang.org/x/crypto/pbkdf2"
     "gopkg.in/yaml.v2"
     "io/ioutil"
+    "crypto/sha1"
 )
 
 type UserList struct {
@@ -26,8 +28,6 @@ func main() {
         log.Fatalf("file.read error: %v", err)
     }
 
-    //fmt.Println(string(file))
-
     err = yaml.Unmarshal(file, &list)
     if err != nil {
         log.Fatalf("unmarshal error: %v", err)
@@ -36,6 +36,9 @@ func main() {
 
     for i := range list.Users {
         list.Users[i].Locked = false
+        salt := ""
+        //fmt.Println(list.Users[i].Pass)
+        list.Users[i].Pass = string(pbkdf2.Key([]byte(list.Users[i].Pass), []byte(salt), 4096, 32, sha1.New))
     }
 
     fmt.Printf("%v\n\n", list)
