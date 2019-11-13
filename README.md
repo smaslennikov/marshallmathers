@@ -2,6 +2,15 @@
 
 I don't know what `unmarshall`ing means
 
+<!-- toc -->
+
+- [Requirements](#undefinedrequirements)
+- [Usage](#undefinedusage)
+- [Assumptions](#undefinedassumptions)
+- [Hash algorithm choice](#undefinedhash-algorithm-choice)
+
+<!-- tocstop -->
+
 ## Requirements
 
 1. ~~Unmarshall data~~
